@@ -7,6 +7,8 @@
 
 using namespace std; // to be deleted when console test is no longer needed
 
+
+
 void InitializeMap(int n, Cell **pMap)
 // Initialize game map with cells
 {
@@ -68,14 +70,100 @@ void Game(int size, int *state, int preSet)
         for (int x = 0; x < size; x++)
         {
             livingNeighbours[y][x] = cellMap[y][x].Neighbours();
-            if (cellMap[y][x].isAlive()) cout << "x "; // delete
-            else cout << "o "; // delete
         }
-        cout << endl;
     }
     // preSet part end
-    cout << "Start" << endl; // delete later
-
+    sf::RenderWindow window(sf::VideoMode(1200, 600), "Game of Life", sf::Style::Titlebar | sf::Style::Close);
+    while (window.isOpen())
+    {
+        sf::Event event;
+        if (*state == 0)
+        {
+            window.close();
+            continue;
+        }
+            while (window.pollEvent(event))
+        {
+            switch (event.type)
+            {
+                case sf::Event::Closed:
+                    *state = 0;
+                    window.close();
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (*state != 0)
+        {
+            if (*state == 2) continue;
+            else
+            {
+                for (int y = 0; y < size; y++) {
+                    for (int x = 0; x < size; x++) {
+                        if (cellMap[y][x].isAlive() &&
+                            (livingNeighbours[y][x] == 2 || livingNeighbours[y][x] == 3))
+                            continue;
+                        else if (cellMap[y][x].isAlive()) {
+                            cellMap[y][x].Kill();
+                            // Change neighbours of adjacent cells
+                            if ((y - 1) >= 0) {
+                                if ((x - 1) >= 0) cellMap[y - 1][x - 1].Neighbours() -= 1;
+                                cellMap[y - 1][x].Neighbours() -= 1;
+                                if ((x + 1) < size) cellMap[y - 1][x + 1].Neighbours() -= 1;
+                            }
+                            if ((x - 1) >= 0) cellMap[y][x - 1].Neighbours() -= 1;
+                            if ((x + 1) < size) cellMap[y][x + 1].Neighbours() -= 1;
+                            if ((y + 1) < size) {
+                                if ((x - 1) >= 0) cellMap[y + 1][x - 1].Neighbours() -= 1;
+                                cellMap[y + 1][x].Neighbours() -= 1;
+                                if ((x + 1) < size) cellMap[y + 1][x + 1].Neighbours() -= 1;
+                            }
+                        } else if (!cellMap[y][x].isAlive() && livingNeighbours[y][x] == 3) {
+                            cellMap[y][x].Born();
+                            // Change neighbours of adjacent cells
+                            if ((y - 1) >= 0) {
+                                if ((x - 1) >= 0) cellMap[y - 1][x - 1].Neighbours() += 1;
+                                cellMap[y - 1][x].Neighbours() += 1;
+                                if ((x + 1) < size) cellMap[y - 1][x + 1].Neighbours() += 1;
+                            }
+                            if ((x - 1) >= 0) cellMap[y][x - 1].Neighbours() += 1;
+                            if ((x + 1) < size) cellMap[y][x + 1].Neighbours() += 1;
+                            if ((y + 1) < size) {
+                                if ((x - 1) >= 0) cellMap[y + 1][x - 1].Neighbours() += 1;
+                                cellMap[y + 1][x].Neighbours() += 1;
+                                if ((x + 1) < size) cellMap[y + 1][x + 1].Neighbours() += 1;
+                            }
+                        } else if (cellMap[y][x].isAlive()) {
+                            cellMap[y][x].Kill();
+                            // Change neighbours of adjacent cells
+                            if ((y - 1) >= 0) {
+                                if ((x - 1) >= 0) cellMap[y - 1][x - 1].Neighbours() -= 1;
+                                cellMap[y - 1][x].Neighbours() -= 1;
+                                if ((x + 1) < size) cellMap[y - 1][x + 1].Neighbours() -= 1;
+                            }
+                            if ((x - 1) >= 0) cellMap[y][x - 1].Neighbours() -= 1;
+                            if ((x + 1) < size) cellMap[y][x + 1].Neighbours() -= 1;
+                            if ((y + 1) < size) {
+                                if ((x - 1) >= 0) cellMap[y + 1][x - 1].Neighbours() -= 1;
+                                cellMap[y + 1][x].Neighbours() -= 1;
+                                if ((x + 1) < size) cellMap[y + 1][x + 1].Neighbours() -= 1;
+                            }
+                        }
+                    }
+                }
+                window.clear();
+                for (int y = 0; y < size; y++) {
+                    for (int x = 0; x < size; x++) {
+                        livingNeighbours[y][x] = cellMap[y][x].Neighbours();
+                        cellMap[y][x].draw(window);
+                    }
+                }
+                window.display();
+                //Sleep(100);
+            }
+        }
+    }
 
     while ((*state) != 0)
     {

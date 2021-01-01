@@ -8,6 +8,8 @@ Cell::Cell(float x, float y, sf::Vector2f size)
 {
     cell.setPosition(x, y);
     cell.setSize(size);
+    cell.setOutlineColor(sf::Color::Black);
+    cell.setOutlineThickness(1);
 }
 
 void Cell::Kill()

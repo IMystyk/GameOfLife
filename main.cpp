@@ -11,9 +11,7 @@ using namespace std;
 int main()
 {
     // Size should be deleted when it's taken care of in size selection
-    int size = 0;
-    cout << "Enter size" << endl;
-    cin >> size;
+    int size = 64;
 
     int state = 0;
     sf::Font arial;
@@ -39,7 +37,7 @@ int main()
     Button pauseButton("pause", 20, {80, 30}, sf::Color::White, sf::Color::Yellow);
     pauseButton.setTextFont(arial);
     pauseButton.setPos({950, 120});
-    Button size64Button("64x64", 20, {80, 30}, sf::Color::White, sf::Color::Black);
+    Button size64Button("64x64", 20, {80, 30}, sf::Color::Cyan, sf::Color::Black);
     size64Button.setTextFont(arial);
     size64Button.setPos({850, 210});
     Button size128Button("128x128", 20, {80, 30}, sf::Color::White, sf::Color::Black);
