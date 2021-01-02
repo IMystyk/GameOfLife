@@ -11,7 +11,7 @@ using namespace std;
 int main()
 {
     // Size should be deleted when it's taken care of in size selection
-    int size = 64;
+    int size = 80;
 
     int state = 0;
     sf::Font arial;
@@ -26,7 +26,7 @@ int main()
     sizeLabel.setPosition({950, 180});
 
     // Initialize app window
-    sf::RenderWindow window(sf::VideoMode(1200, 600), "Game of Life", sf::Style::Titlebar | sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode(1200, 600), "GameWindow of Life", sf::Style::Titlebar | sf::Style::Close);
     // Initialize buttons
     Button playButton("play", 20, {80, 30}, sf::Color::White, sf::Color::Green);
     playButton.setTextFont(arial);
@@ -80,7 +80,7 @@ int main()
                         playButton.setBgColor(sf::Color::White);
                         stopButton.setBgColor(sf::Color::White);
                         pauseButton.setBgColor(sf::Color::White);
-                        if (size != 70) size64Button.setBgColor(sf::Color::White);
+                        if (size != 80) size64Button.setBgColor(sf::Color::White);
                         if (size != 144) size128Button.setBgColor(sf::Color::White);
                         if (size != 272) size256Button.setBgColor(sf::Color::White);
                     }
@@ -101,7 +101,8 @@ int main()
                             else if (state == 0)
                             {
                                 state = 1;
-                                thread game(Game, size, &state, 1);
+                                thread game(GameWindow, size, &state, 1);
+                                ShowWindow(window.getSystemHandle(), SW_MINIMIZE);
                                 games.push_back(move(game));
                             }
                         }
@@ -115,7 +116,7 @@ int main()
                         }
                         else if (size64Button.isMouseOver(window))
                         {
-                            size = 70;
+                            size = 80;
                         }
                         else if (size128Button.isMouseOver(window))
                         {

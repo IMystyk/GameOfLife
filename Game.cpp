@@ -3,10 +3,10 @@
 //
 #include <iostream>
 #include <windows.h>
+#include <winuser.h>
 #include "Game.h"
 
 using namespace std; // to be deleted when console test is no longer needed
-
 
 
 void InitializeMap(int n, Cell **pMap)
@@ -18,17 +18,17 @@ void InitializeMap(int n, Cell **pMap)
     {
         for (int x = 0; x < n; x++)
         {
-            pMap[y][x] = Cell(posX, posY, {8,8});
-            posX += 8;
+            pMap[y][x] = Cell(posX, posY, {7,7});
+            posX += 7;
         }
         posX = 10;
-        posY += 8;
+        posY += 7;
     }
 }
 
-void Game(int size, int *state, int preSet)
+void Game(int size, int *state, int preSet, sf::RenderWindow &window)
 {
-    // Create array storing living neighbours
+    sf::Context context;
     int **livingNeighbours;
     livingNeighbours = new int*[size];
     for (int i = 0; i < size; i++)
@@ -73,105 +73,13 @@ void Game(int size, int *state, int preSet)
         }
     }
     // preSet part end
-    sf::RenderWindow window(sf::VideoMode(1200, 600), "Game of Life", sf::Style::Titlebar | sf::Style::Close);
-    while (window.isOpen())
-    {
-        sf::Event event;
-        if (*state == 0)
-        {
-            window.close();
-            continue;
-        }
-            while (window.pollEvent(event))
-        {
-            switch (event.type)
-            {
-                case sf::Event::Closed:
-                    *state = 0;
-                    window.close();
-                    break;
-                default:
-                    break;
-            }
-        }
-        if (*state != 0)
-        {
-            if (*state == 2) continue;
-            else
-            {
-                for (int y = 0; y < size; y++) {
-                    for (int x = 0; x < size; x++) {
-                        if (cellMap[y][x].isAlive() &&
-                            (livingNeighbours[y][x] == 2 || livingNeighbours[y][x] == 3))
-                            continue;
-                        else if (cellMap[y][x].isAlive()) {
-                            cellMap[y][x].Kill();
-                            // Change neighbours of adjacent cells
-                            if ((y - 1) >= 0) {
-                                if ((x - 1) >= 0) cellMap[y - 1][x - 1].Neighbours() -= 1;
-                                cellMap[y - 1][x].Neighbours() -= 1;
-                                if ((x + 1) < size) cellMap[y - 1][x + 1].Neighbours() -= 1;
-                            }
-                            if ((x - 1) >= 0) cellMap[y][x - 1].Neighbours() -= 1;
-                            if ((x + 1) < size) cellMap[y][x + 1].Neighbours() -= 1;
-                            if ((y + 1) < size) {
-                                if ((x - 1) >= 0) cellMap[y + 1][x - 1].Neighbours() -= 1;
-                                cellMap[y + 1][x].Neighbours() -= 1;
-                                if ((x + 1) < size) cellMap[y + 1][x + 1].Neighbours() -= 1;
-                            }
-                        } else if (!cellMap[y][x].isAlive() && livingNeighbours[y][x] == 3) {
-                            cellMap[y][x].Born();
-                            // Change neighbours of adjacent cells
-                            if ((y - 1) >= 0) {
-                                if ((x - 1) >= 0) cellMap[y - 1][x - 1].Neighbours() += 1;
-                                cellMap[y - 1][x].Neighbours() += 1;
-                                if ((x + 1) < size) cellMap[y - 1][x + 1].Neighbours() += 1;
-                            }
-                            if ((x - 1) >= 0) cellMap[y][x - 1].Neighbours() += 1;
-                            if ((x + 1) < size) cellMap[y][x + 1].Neighbours() += 1;
-                            if ((y + 1) < size) {
-                                if ((x - 1) >= 0) cellMap[y + 1][x - 1].Neighbours() += 1;
-                                cellMap[y + 1][x].Neighbours() += 1;
-                                if ((x + 1) < size) cellMap[y + 1][x + 1].Neighbours() += 1;
-                            }
-                        } else if (cellMap[y][x].isAlive()) {
-                            cellMap[y][x].Kill();
-                            // Change neighbours of adjacent cells
-                            if ((y - 1) >= 0) {
-                                if ((x - 1) >= 0) cellMap[y - 1][x - 1].Neighbours() -= 1;
-                                cellMap[y - 1][x].Neighbours() -= 1;
-                                if ((x + 1) < size) cellMap[y - 1][x + 1].Neighbours() -= 1;
-                            }
-                            if ((x - 1) >= 0) cellMap[y][x - 1].Neighbours() -= 1;
-                            if ((x + 1) < size) cellMap[y][x + 1].Neighbours() -= 1;
-                            if ((y + 1) < size) {
-                                if ((x - 1) >= 0) cellMap[y + 1][x - 1].Neighbours() -= 1;
-                                cellMap[y + 1][x].Neighbours() -= 1;
-                                if ((x + 1) < size) cellMap[y + 1][x + 1].Neighbours() -= 1;
-                            }
-                        }
-                    }
-                }
-                window.clear();
-                for (int y = 0; y < size; y++) {
-                    for (int x = 0; x < size; x++) {
-                        livingNeighbours[y][x] = cellMap[y][x].Neighbours();
-                        cellMap[y][x].draw(window);
-                    }
-                }
-                window.display();
-                //Sleep(100);
-            }
-        }
-    }
 
-    while ((*state) != 0)
+
+    while (*state != 0)
     {
         if (*state == 2) continue;
         else
         {
-            system("CLS");
-
             for (int y = 0; y < size; y++) {
                 for (int x = 0; x < size; x++) {
                     if (cellMap[y][x].isAlive() &&
@@ -225,18 +133,17 @@ void Game(int size, int *state, int preSet)
                     }
                 }
             }
+            window.clear();
             for (int y = 0; y < size; y++) {
                 for (int x = 0; x < size; x++) {
                     livingNeighbours[y][x] = cellMap[y][x].Neighbours();
-                    if (cellMap[y][x].isAlive()) cout << "x ";
-                    else cout << "o ";
+                    cellMap[y][x].draw(window);
                 }
-                cout << endl;
             }
-            Sleep(2000);
+            window.display();
+            Sleep(50);
         }
     }
-    // Delete array storing living neighbours
     for (int i = 0; i < size; i++)
     {
         delete[] livingNeighbours[i];
@@ -248,6 +155,42 @@ void Game(int size, int *state, int preSet)
         delete[] cellMap[i];
     }
     delete[] cellMap;
+}
+
+
+void GameWindow(int size, int *state, int preSet)
+{
+    sf::RenderWindow window(sf::VideoMode(1200, 600), "GameWindow of Life", sf::Style::Titlebar | sf::Style::Close);
+    sf::Context context;
+    sf::Event event;
+    thread play(Game, size, &(*state), preSet, std::ref(window));
+    while (window.isOpen())
+    {
+
+        if (*state == 0)
+        {
+            play.join();
+            window.close();
+            continue;
+        }
+        while (window.pollEvent(event))
+        {
+            switch (event.type)
+            {
+                case sf::Event::Closed:
+                    *state = 0;
+                    play.join();
+                    window.close();
+                    break;
+                case sf::Event::MouseMoved:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+    }
+
 }
 
 
