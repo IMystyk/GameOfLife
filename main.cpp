@@ -10,13 +10,12 @@ using namespace std;
 
 int main()
 {
-    // Size should be deleted when it's taken care of in size selection
     int size = 80;
-
     int state = 0;
     sf::Font arial;
     arial.loadFromFile("..\\arial.ttf");
     vector <thread> games;
+    vector <Button*> buttons;
 
     sf::Text sizeLabel;
     sizeLabel.setFont(arial);
@@ -27,25 +26,32 @@ int main()
 
     // Initialize app window
     sf::RenderWindow window(sf::VideoMode(1200, 600), "GameWindow of Life", sf::Style::Titlebar | sf::Style::Close);
+    sf::Context context;
     // Initialize buttons
-    Button playButton("play", 20, {80, 30}, sf::Color::White, sf::Color::Green);
-    playButton.setTextFont(arial);
-    playButton.setPos({850, 120});
-    Button stopButton("stop", 20, {80, 30}, sf::Color::White, sf::Color::Red);
-    stopButton.setTextFont(arial);
-    stopButton.setPos({1050, 120});
-    Button pauseButton("pause", 20, {80, 30}, sf::Color::White, sf::Color::Yellow);
-    pauseButton.setTextFont(arial);
-    pauseButton.setPos({950, 120});
-    Button size64Button("64x64", 20, {80, 30}, sf::Color::Cyan, sf::Color::Black);
-    size64Button.setTextFont(arial);
-    size64Button.setPos({850, 210});
-    Button size128Button("128x128", 20, {80, 30}, sf::Color::White, sf::Color::Black);
-    size128Button.setTextFont(arial);
-    size128Button.setPos({950, 210});
-    Button size256Button("256x256", 20, {80, 30}, sf::Color::White, sf::Color::Black);
-    size256Button.setTextFont(arial);
-    size256Button.setPos({1050, 210});
+    Button *playButton = new Button("play", 20, {80, 30}, sf::Color::White, sf::Color::Green);
+    playButton->setTextFont(arial);
+    playButton->setPos({850, 120});
+    buttons.push_back(playButton);
+    Button *stopButton = new Button("stop", 20, {80, 30}, sf::Color::White, sf::Color::Red);
+    stopButton->setTextFont(arial);
+    stopButton->setPos({1050, 120});
+    buttons.push_back(stopButton);
+    Button *pauseButton = new Button("pause", 20, {80, 30}, sf::Color::White, sf::Color::Yellow);
+    pauseButton->setTextFont(arial);
+    pauseButton->setPos({950, 120});
+    buttons.push_back(pauseButton);
+    Button *size64Button = new Button("64x64", 20, {80, 30}, sf::Color::Cyan, sf::Color::Black);
+    size64Button->setTextFont(arial);
+    size64Button->setPos({850, 210});
+    buttons.push_back(size64Button);
+    Button *size128Button = new Button("128x128", 20, {80, 30}, sf::Color::White, sf::Color::Black);
+    size128Button->setTextFont(arial);
+    size128Button->setPos({950, 210});
+    buttons.push_back(size128Button);
+    Button *size256Button = new Button("256x256", 20, {80, 30}, sf::Color::White, sf::Color::Black);
+    size256Button->setTextFont(arial);
+    size256Button->setPos({1050, 210});
+    buttons.push_back(size256Button);
 
 
     while (window.isOpen())
@@ -63,32 +69,32 @@ int main()
                     window.close();
                     break;
                 case sf::Event::MouseMoved:
-                    if (playButton.isMouseOver(window))
-                        playButton.setBgColor(sf::Color::Cyan);
-                    else if (stopButton.isMouseOver(window))
-                        stopButton.setBgColor(sf::Color::Yellow);
-                    else if (pauseButton.isMouseOver(window))
-                        pauseButton.setBgColor(sf::Color::Blue);
-                    else if (size64Button.isMouseOver(window))
-                        size64Button.setBgColor(sf::Color::Cyan);
-                    else if (size128Button.isMouseOver(window))
-                        size128Button.setBgColor(sf::Color::Cyan);
-                    else if (size256Button.isMouseOver(window))
-                        size256Button.setBgColor(sf::Color::Cyan);
+                    if (playButton->isMouseOver(window))
+                        playButton->setBgColor(sf::Color::Cyan);
+                    else if (stopButton->isMouseOver(window))
+                        stopButton->setBgColor(sf::Color::Yellow);
+                    else if (pauseButton->isMouseOver(window))
+                        pauseButton->setBgColor(sf::Color::Blue);
+                    else if (size64Button->isMouseOver(window))
+                        size64Button->setBgColor(sf::Color::Cyan);
+                    else if (size128Button->isMouseOver(window))
+                        size128Button->setBgColor(sf::Color::Cyan);
+                    else if (size256Button->isMouseOver(window))
+                        size256Button->setBgColor(sf::Color::Cyan);
                     else
                     {
-                        playButton.setBgColor(sf::Color::White);
-                        stopButton.setBgColor(sf::Color::White);
-                        pauseButton.setBgColor(sf::Color::White);
-                        if (size != 80) size64Button.setBgColor(sf::Color::White);
-                        if (size != 144) size128Button.setBgColor(sf::Color::White);
-                        if (size != 272) size256Button.setBgColor(sf::Color::White);
+                        playButton->setBgColor(sf::Color::White);
+                        stopButton->setBgColor(sf::Color::White);
+                        pauseButton->setBgColor(sf::Color::White);
+                        if (size != 80) size64Button->setBgColor(sf::Color::White);
+                        if (size != 144) size128Button->setBgColor(sf::Color::White);
+                        if (size != 272) size256Button->setBgColor(sf::Color::White);
                     }
                     break;
                 case sf::Event::MouseButtonPressed:
                     if (event.mouseButton.button == sf::Mouse::Left)
                     {
-                        if (playButton.isMouseOver(window))
+                        if (playButton->isMouseOver(window))
                         {
                             if (state == 1)
                             {
@@ -101,28 +107,35 @@ int main()
                             else if (state == 0)
                             {
                                 state = 1;
-                                thread game(GameWindow, size, &state, 1);
-                                ShowWindow(window.getSystemHandle(), SW_MINIMIZE);
+                                window.setActive(false);
+                                thread game(Game, size, &state, 1, std::ref(window), std::ref(buttons));
                                 games.push_back(move(game));
                             }
                         }
-                        else if (stopButton.isMouseOver(window))
+                        else if (stopButton->isMouseOver(window))
                         {
                             state = 0;
+                            // This doesn't work after the first one, no idea why
+//                            for (auto &game: games)
+//                            {
+//                                game.join();
+//                            }
+                            Sleep(60);
+                            window.setActive(true);
                         }
-                        else if (pauseButton.isMouseOver(window))
+                        else if (pauseButton->isMouseOver(window))
                         {
                             state = 2;
                         }
-                        else if (size64Button.isMouseOver(window))
+                        else if (size64Button->isMouseOver(window))
                         {
                             size = 80;
                         }
-                        else if (size128Button.isMouseOver(window))
+                        else if (size128Button->isMouseOver(window))
                         {
                             size = 144;
                         }
-                        else if (size256Button.isMouseOver(window))
+                        else if (size256Button->isMouseOver(window))
                         {
                             size = 272;
                         }
@@ -132,15 +145,17 @@ int main()
                     break;
             }
         }
-        window.clear(sf::Color::White);
-        playButton.draw(window);
-        stopButton.draw(window);
-        pauseButton.draw(window);
-        window.draw(sizeLabel);
-        size64Button.draw(window);
-        size128Button.draw(window);
-        size256Button.draw(window);
-        window.display();
+        if (!state) {
+            window.clear(sf::Color::White);
+            playButton->draw(window);
+            stopButton->draw(window);
+            pauseButton->draw(window);
+            window.draw(sizeLabel);
+            size64Button->draw(window);
+            size128Button->draw(window);
+            size256Button->draw(window);
+            window.display();
+        }
     }
 
 

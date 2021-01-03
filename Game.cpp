@@ -26,7 +26,7 @@ void InitializeMap(int n, Cell **pMap)
     }
 }
 
-void Game(int size, int *state, int preSet, sf::RenderWindow &window)
+void Game(int size, int *state, int preSet, sf::RenderWindow &window, std::vector<Button*> &buttons)
 {
     sf::Context context;
     int **livingNeighbours;
@@ -45,9 +45,12 @@ void Game(int size, int *state, int preSet, sf::RenderWindow &window)
     // Initialize game map with cells
     InitializeMap(size, cellMap);
     // TO DO preSet part (real one)
-    int y[] = {1,2,3, 3, 3};
-    int x[] = {2,3,1, 2, 3};
-    for (int i = 0; i < 5; i++)
+//    int y[] = {1,2,3, 3, 3};
+//    int x[] = {2,3,1, 2, 3};
+    int y[] = {5,6,5,6,5,6,7,4,8,3,9,3,9,6,4,8,5,6,7,6,3,4,5,3,4,5,2,6,1,2,6,7,3,4,3,4};
+    int x[] {1,1,2,6,11,11,11,12,12,13,13,14,14,15,16,16,17,17,17,18,21,21,21,22,22,22,23,23,25,25,25,25,35,35,36,36};
+
+    for (int i = 0; i < 36; i++)
     {
         cellMap[y[i]][x[i]].Born();
         if((y[i] - 1) >= 0)
@@ -77,7 +80,21 @@ void Game(int size, int *state, int preSet, sf::RenderWindow &window)
 
     while (*state != 0)
     {
-        if (*state == 2) continue;
+        if (*state == 2)
+        {
+            window.clear(sf::Color::White);
+            for (int y = 0; y < size; y++) {
+                for (int x = 0; x < size; x++) {
+                    cellMap[y][x].draw(window);
+                }
+            }
+            for (auto &button: buttons)
+            {
+                button->draw(window);
+            }
+            window.display();
+            continue;
+        }
         else
         {
             for (int y = 0; y < size; y++) {
@@ -133,12 +150,16 @@ void Game(int size, int *state, int preSet, sf::RenderWindow &window)
                     }
                 }
             }
-            window.clear();
+            window.clear(sf::Color::White);
             for (int y = 0; y < size; y++) {
                 for (int x = 0; x < size; x++) {
                     livingNeighbours[y][x] = cellMap[y][x].Neighbours();
                     cellMap[y][x].draw(window);
                 }
+            }
+            for (auto &button: buttons)
+            {
+                button->draw(window);
             }
             window.display();
             Sleep(50);
@@ -155,43 +176,51 @@ void Game(int size, int *state, int preSet, sf::RenderWindow &window)
         delete[] cellMap[i];
     }
     delete[] cellMap;
+    window.setActive(false);
 }
 
 
-void GameWindow(int size, int *state, int preSet)
-{
-    sf::RenderWindow window(sf::VideoMode(1200, 600), "GameWindow of Life", sf::Style::Titlebar | sf::Style::Close);
-    sf::Context context;
-    sf::Event event;
-    thread play(Game, size, &(*state), preSet, std::ref(window));
-    while (window.isOpen())
-    {
-
-        if (*state == 0)
-        {
-            play.join();
-            window.close();
-            continue;
-        }
-        while (window.pollEvent(event))
-        {
-            switch (event.type)
-            {
-                case sf::Event::Closed:
-                    *state = 0;
-                    play.join();
-                    window.close();
-                    break;
-                case sf::Event::MouseMoved:
-                    break;
-                default:
-                    break;
-            }
-        }
-
-    }
-
-}
+//void GameWindow(int size, int *state, int preSet)
+//{
+//    sf::RenderWindow window(sf::VideoMode(1200, 600), "GameWindow of Life", sf::Style::Titlebar | sf::Style::Close);
+//    sf::Context context;
+//    sf::Event event;
+//    sf::Font arial;
+//    arial.loadFromFile("..\\arial.ttf");
+//    vector <Button> buttons;
+//    Button playButton("play", 20, {80, 30}, sf::Color::White, sf::Color::Green);
+//    playButton.setTextFont(arial);
+//    playButton.setPos({850, 120});
+//    buttons.push_back(playButton);
+//    //thread play(Game, size, &(*state), preSet, std::ref(window), std::ref(buttons));
+//    while (window.isOpen())
+//    {
+//
+//        if (*state == 0)
+//        {
+//            play.join();
+//            window.close();
+//            continue;
+//        }
+//        while (window.pollEvent(event))
+//        {
+//            switch (event.type)
+//            {
+//                case sf::Event::Closed:
+//                    *state = 0;
+//                    play.join();
+//                    window.close();
+//                    break;
+//                case sf::Event::MouseMoved:
+//                    break;
+//                default:
+//                    break;
+//            }
+//        }
+//
+//    }
+//
+//}
 
 
 
