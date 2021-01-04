@@ -19,7 +19,7 @@ int main()
     vector <thread> games;
     vector <Button*> buttons;
 
-    //Text labels
+    // Text labels
     sf::Text sizeLabel;
     sizeLabel.setFont(arial);
     sizeLabel.setString("Size");
@@ -308,13 +308,6 @@ int main()
                                     cellMap[y + 1][x].Neighbours() += 1;
                                     if ((x + 1) < size) cellMap[y + 1][x + 1].Neighbours() += 1;
                                 }
-                                for (int y = 0; y < size; y++)
-                                {
-                                    for (int x = 0; x < size; x++)
-                                    {
-                                        livingNeighbours[y][x] = cellMap[y][x].Neighbours();
-                                    }
-                                }
                             }
                             modelFile.close();
                         }
@@ -346,13 +339,6 @@ int main()
                                     if ((x - 1) >= 0) cellMap[y + 1][x - 1].Neighbours() += 1;
                                     cellMap[y + 1][x].Neighbours() += 1;
                                     if ((x + 1) < size) cellMap[y + 1][x + 1].Neighbours() += 1;
-                                }
-                                for (int y = 0; y < size; y++)
-                                {
-                                    for (int x = 0; x < size; x++)
-                                    {
-                                        livingNeighbours[y][x] = cellMap[y][x].Neighbours();
-                                    }
                                 }
                             }
                             modelFile.close();
@@ -388,13 +374,6 @@ int main()
                                     cellMap[y + 1][x].Neighbours() += 1;
                                     if ((x + 1) < size) cellMap[y + 1][x + 1].Neighbours() += 1;
                                 }
-                                for (int y = 0; y < size; y++)
-                                {
-                                    for (int x = 0; x < size; x++)
-                                    {
-                                        livingNeighbours[y][x] = cellMap[y][x].Neighbours();
-                                    }
-                                }
                             }
                             modelFile.close();
                         }
@@ -422,13 +401,6 @@ int main()
                                     if ((x - 1) >= 0) cellMap[y + 1][x - 1].Neighbours() += 1;
                                     cellMap[y + 1][x].Neighbours() += 1;
                                     if ((x + 1) < size) cellMap[y + 1][x + 1].Neighbours() += 1;
-                                }
-                                for (int y = 0; y < size; y++)
-                                {
-                                    for (int x = 0; x < size; x++)
-                                    {
-                                        livingNeighbours[y][x] = cellMap[y][x].Neighbours();
-                                    }
                                 }
                             }
                             modelFile.close();
@@ -461,13 +433,6 @@ int main()
                                     if ((x - 1) >= 0) cellMap[y + 1][x - 1].Neighbours() += 1;
                                     cellMap[y + 1][x].Neighbours() += 1;
                                     if ((x + 1) < size) cellMap[y + 1][x + 1].Neighbours() += 1;
-                                }
-                                for (int y = 0; y < size; y++)
-                                {
-                                    for (int x = 0; x < size; x++)
-                                    {
-                                        livingNeighbours[y][x] = cellMap[y][x].Neighbours();
-                                    }
                                 }
                             }
                             modelFile.close();
@@ -502,13 +467,6 @@ int main()
                                     if ((x - 1) >= 0) cellMap[y + 1][x - 1].Neighbours() += 1;
                                     cellMap[y + 1][x].Neighbours() += 1;
                                     if ((x + 1) < size) cellMap[y + 1][x + 1].Neighbours() += 1;
-                                }
-                                for (int y = 0; y < size; y++)
-                                {
-                                    for (int x = 0; x < size; x++)
-                                    {
-                                        livingNeighbours[y][x] = cellMap[y][x].Neighbours();
-                                    }
                                 }
                             }
                             modelFile.close();
@@ -580,6 +538,7 @@ int main()
                     break;
             }
         }
+        // Draw stuff to window
         if (!state) {
             window.clear(sf::Color::White);
             for (int i = 0; i < size; i++)
