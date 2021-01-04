@@ -285,7 +285,6 @@ int main()
                         }*/
                         else if (testModel->isMouseOver(window) && state == 0 && size == 16)
                         {
-                            // TO DO remember to change size if necessary
                             InitializeMap(64, cellMap, size);
                             ifstream modelFile;
                             modelFile.open("..\\Assets\\test.txt");
