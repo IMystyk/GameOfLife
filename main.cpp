@@ -13,7 +13,7 @@ int main()
 {
     int size = 64;
     int state = 0;
-    string fileName; // TO DO delete this
+    //string fileName; // used when saving new models
     sf::Font arial;
     arial.loadFromFile("..\\arial.ttf");
     vector <thread> games;
