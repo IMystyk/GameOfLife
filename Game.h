@@ -10,8 +10,7 @@
 #include <vector>
 #include <thread>
 
-void InitializeMap(int n, Cell **pMap);
-//void GameWindow(int size, int *state, int preSet); // preSet is yet to be defined
-void Game(int size, int *state, int preSet, sf::RenderWindow &window, std::vector<Button*> &buttons);
+void InitializeMap(int n, Cell **pMap, int size);
+void Game(int size, int *state, int **livingNeighbours, Cell **cellMap,sf::RenderWindow &window, std::vector<Button*> &buttons);
 
 #endif //CGOL_GAME_H

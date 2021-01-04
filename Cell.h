@@ -5,12 +5,15 @@
 #ifndef CGOL_CELL_H
 #define CGOL_CELL_H
 #include <SFML/Graphics.hpp>
+#include <windows.h>
 
 class Cell{
     bool alive = false;
     int neighbours = 0;
     sf::RectangleShape cell;
+
 public:
+    bool modified = false;
     Cell() = default;
     Cell(float x, float y, sf::Vector2f size);
     void setSize(sf::Vector2f size);

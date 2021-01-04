@@ -3,71 +3,44 @@
 //
 #include <iostream>
 #include <windows.h>
-#include <winuser.h>
 #include "Game.h"
 
-using namespace std; // to be deleted when console test is no longer needed
 
-
-void InitializeMap(int n, Cell **pMap)
+void InitializeMap(int n, Cell **pMap, int size)
 // Initialize game map with cells
 {
-    float posX = 10;
+    float mult = 1;
+    if (size == 16) mult = 4;
+    else if (size == 32) mult = 2;
+    float posX = 100;
     float posY = 10;
     for (int y = 0; y < n; y++)
     {
         for (int x = 0; x < n; x++)
         {
-            pMap[y][x] = Cell(posX, posY, {7,7});
-            posX += 7;
+            pMap[y][x] = Cell(posX, posY, {mult * 9,mult * 9});
+            posX += mult * 9;
         }
-        posX = 10;
-        posY += 7;
+        posX = 100;
+        posY += mult * 9;
     }
 }
 
-void Game(int size, int *state, int preSet, sf::RenderWindow &window, std::vector<Button*> &buttons)
+void Game(int size, int *state, int **livingNeighbours, Cell **cellMap, sf::RenderWindow &window, std::vector<Button*> &buttons)
 {
+    // Creating text labels
+    sf::Font arial;
+    arial.loadFromFile("..\\arial.ttf");
     sf::Context context;
-    int **livingNeighbours;
-    livingNeighbours = new int*[size];
-    for (int i = 0; i < size; i++)
-    {
-        livingNeighbours[i] = new int[size];
-    }
-    // Create cell map
-    Cell **cellMap;
-    cellMap = new Cell*[size];
-    for (int i = 0; i < size; i++)
-    {
-        cellMap[i] = new Cell[size];
-    }
-    // Initialize game map with cells
-    InitializeMap(size, cellMap);
-    // TO DO preSet part (real one)
-//    int y[] = {1,2,3, 3, 3};
-//    int x[] = {2,3,1, 2, 3};
-    int y[] = {5,6,5,6,5,6,7,4,8,3,9,3,9,6,4,8,5,6,7,6,3,4,5,3,4,5,2,6,1,2,6,7,3,4,3,4};
-    int x[] {1,1,2,6,11,11,11,12,12,13,13,14,14,15,16,16,17,17,17,18,21,21,21,22,22,22,23,23,25,25,25,25,35,35,36,36};
+    sf::Text sizeLabel;
+    sizeLabel.setFont(arial);
+    sizeLabel.setString("Size");
+    sizeLabel.setCharacterSize(25);
+    sizeLabel.setFillColor(sf::Color::Black);
+    sizeLabel.setPosition({950, 180});
 
-    for (int i = 0; i < 36; i++)
-    {
-        cellMap[y[i]][x[i]].Born();
-        if((y[i] - 1) >= 0)
-        {
-            if((x[i] - 1) >= 0) cellMap[y[i]-1][x[i]-1].Neighbours() += 1;
-            cellMap[y[i]-1][x[i]].Neighbours() += 1;
-            if((x[i] + 1) < size) cellMap[y[i]-1][x[i] + 1].Neighbours() += 1;
-        }
-        if((x[i] - 1) >= 0) cellMap[y[i]][x[i]-1].Neighbours() += 1;
-        if((x[i] + 1) < size) cellMap[y[i]][x[i] + 1].Neighbours() += 1;
-        if((y[i] + 1) < size)
-        {
-            if((x[i] - 1) >= 0) cellMap[y[i]+1][x[i]-1].Neighbours() += 1;
-            cellMap[y[i]+1][x[i]].Neighbours() += 1;
-            if((x[i] + 1) < size) cellMap[y[i]+1][x[i] + 1].Neighbours() += 1;
-        }
-    }
+
+
     for (int y = 0; y < size; y++)
     {
         for (int x = 0; x < size; x++)
@@ -75,7 +48,6 @@ void Game(int size, int *state, int preSet, sf::RenderWindow &window, std::vecto
             livingNeighbours[y][x] = cellMap[y][x].Neighbours();
         }
     }
-    // preSet part end
 
 
     while (*state != 0)
@@ -92,6 +64,7 @@ void Game(int size, int *state, int preSet, sf::RenderWindow &window, std::vecto
             {
                 button->draw(window);
             }
+            window.draw(sizeLabel);
             window.display();
             continue;
         }
@@ -161,66 +134,15 @@ void Game(int size, int *state, int preSet, sf::RenderWindow &window, std::vecto
             {
                 button->draw(window);
             }
+            window.draw(sizeLabel);
             window.display();
-            Sleep(50);
+            if (*state != 0 && size == 64) Sleep(100);
+            else if (*state != 0) Sleep(200);
         }
     }
-    for (int i = 0; i < size; i++)
-    {
-        delete[] livingNeighbours[i];
-    }
-    delete[] livingNeighbours;
-    // Delete cell map
-    for (int i = 0; i < size; i++)
-    {
-        delete[] cellMap[i];
-    }
-    delete[] cellMap;
+    InitializeMap(64, cellMap, size);
     window.setActive(false);
 }
-
-
-//void GameWindow(int size, int *state, int preSet)
-//{
-//    sf::RenderWindow window(sf::VideoMode(1200, 600), "GameWindow of Life", sf::Style::Titlebar | sf::Style::Close);
-//    sf::Context context;
-//    sf::Event event;
-//    sf::Font arial;
-//    arial.loadFromFile("..\\arial.ttf");
-//    vector <Button> buttons;
-//    Button playButton("play", 20, {80, 30}, sf::Color::White, sf::Color::Green);
-//    playButton.setTextFont(arial);
-//    playButton.setPos({850, 120});
-//    buttons.push_back(playButton);
-//    //thread play(Game, size, &(*state), preSet, std::ref(window), std::ref(buttons));
-//    while (window.isOpen())
-//    {
-//
-//        if (*state == 0)
-//        {
-//            play.join();
-//            window.close();
-//            continue;
-//        }
-//        while (window.pollEvent(event))
-//        {
-//            switch (event.type)
-//            {
-//                case sf::Event::Closed:
-//                    *state = 0;
-//                    play.join();
-//                    window.close();
-//                    break;
-//                case sf::Event::MouseMoved:
-//                    break;
-//                default:
-//                    break;
-//            }
-//        }
-//
-//    }
-//
-//}
 
 
 
