@@ -105,21 +105,6 @@ void Game(int size, int *state, int **livingNeighbours, Cell **cellMap, sf::Rend
                             cellMap[y + 1][x].Neighbours() += 1;
                             if ((x + 1) < size) cellMap[y + 1][x + 1].Neighbours() += 1;
                         }
-                    } else if (cellMap[y][x].isAlive()) {
-                        cellMap[y][x].Kill();
-                        // Change neighbours of adjacent cells
-                        if ((y - 1) >= 0) {
-                            if ((x - 1) >= 0) cellMap[y - 1][x - 1].Neighbours() -= 1;
-                            cellMap[y - 1][x].Neighbours() -= 1;
-                            if ((x + 1) < size) cellMap[y - 1][x + 1].Neighbours() -= 1;
-                        }
-                        if ((x - 1) >= 0) cellMap[y][x - 1].Neighbours() -= 1;
-                        if ((x + 1) < size) cellMap[y][x + 1].Neighbours() -= 1;
-                        if ((y + 1) < size) {
-                            if ((x - 1) >= 0) cellMap[y + 1][x - 1].Neighbours() -= 1;
-                            cellMap[y + 1][x].Neighbours() -= 1;
-                            if ((x + 1) < size) cellMap[y + 1][x + 1].Neighbours() -= 1;
-                        }
                     }
                 }
             }
