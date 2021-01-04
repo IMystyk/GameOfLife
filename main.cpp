@@ -19,6 +19,7 @@ int main()
     vector <thread> games;
     vector <Button*> buttons;
 
+    //Text labels
     sf::Text sizeLabel;
     sizeLabel.setFont(arial);
     sizeLabel.setString("Size");
