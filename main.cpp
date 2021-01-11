@@ -581,5 +581,18 @@ int main()
     }
     delete[] cellMap;
 
+    // Delete all window elements
+
+    for (auto &button: buttons)
+    {
+        delete button;
+    }
+    delete testModel;
+    delete gliderModel;
+    delete gunModel;
+    delete pulsarModel;
+    delete pentaModel;
+    delete methuselahModel;
+
     return 0;
 }
