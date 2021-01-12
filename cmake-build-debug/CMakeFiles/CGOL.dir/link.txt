@@ -1,0 +1,3 @@
+"D:\Program Files\JetBrains\CLion 2020.2.4\bin\cmake\win\bin\cmake.exe" -E rm -f CMakeFiles\CGOL.dir/objects.a
+C:\mingw64\bin\ar.exe cr CMakeFiles\CGOL.dir/objects.a @CMakeFiles\CGOL.dir\objects1.rsp
+C:\mingw64\bin\g++.exe -g  -static -mwindows -Wl,--whole-archive CMakeFiles\CGOL.dir/objects.a -Wl,--no-whole-archive  -o CGOL.exe -Wl,--out-implib,libCGOL.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\CGOL.dir\linklibs.rsp

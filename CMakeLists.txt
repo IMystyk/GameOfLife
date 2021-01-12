@@ -3,7 +3,11 @@ project(CGOL)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(CGOL main.cpp Cell.cpp Cell.h Button.cpp Button.h Game.h Game.cpp)
+set(SOURCES main.cpp Cell.cpp Cell.h Button.cpp Button.h Game.h Game.cpp)
+
+add_executable(CGOL WIN32 ${SOURCES})
+
+set(CMAKE_EXE_LINKER_FLAGS "-static")
 
 set(SFML_ROOT "C:/SFML")
 
@@ -27,4 +31,3 @@ if(WIN32)
     file(GLOB BINARY_DEP_DLLS "${SFML_INCLUDE_DIR}/../bin/*.dll")
     file(COPY ${BINARY_DEP_DLLS} DESTINATION ${CMAKE_BINARY_DIR})
 endif()
-

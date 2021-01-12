@@ -30,7 +30,7 @@ void Game(int size, int *state, int **livingNeighbours, Cell **cellMap, sf::Rend
 {
     // Creating text labels
     sf::Font arial;
-    arial.loadFromFile("..\\arial.ttf");
+    arial.loadFromFile("..\\Assets\\arial.ttf");
     sf::Context context;
     sf::Text sizeLabel;
     sizeLabel.setFont(arial);

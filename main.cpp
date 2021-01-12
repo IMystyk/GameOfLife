@@ -15,7 +15,7 @@ int main()
     int state = 0;
     //string fileName; // used when saving new models
     sf::Font arial;
-    arial.loadFromFile("..\\arial.ttf");
+    arial.loadFromFile("..\\Assets\\arial.ttf");
     vector <thread> games;
     vector <Button*> buttons;
 

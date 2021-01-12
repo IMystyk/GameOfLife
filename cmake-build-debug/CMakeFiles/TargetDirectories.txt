@@ -1,0 +1,3 @@
+D:/Users/mateu/Desktop/Mystyk/Prz_Informatics/Semester3/Programming_in_C++/Project/CGOL/cmake-build-debug/CMakeFiles/CGOL.dir
+D:/Users/mateu/Desktop/Mystyk/Prz_Informatics/Semester3/Programming_in_C++/Project/CGOL/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/Users/mateu/Desktop/Mystyk/Prz_Informatics/Semester3/Programming_in_C++/Project/CGOL/cmake-build-debug/CMakeFiles/rebuild_cache.dir
